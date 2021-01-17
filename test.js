@@ -8,6 +8,7 @@ class Deck{
     this.reset();
     this.shuffle();
     this.length = 52;
+    
   }
   
 
@@ -56,13 +57,18 @@ let regex = /\d+|king|Ace|Queen|Jack/gi;
 const deck = new Deck();
 let totalScore = 0;
 let cardArray = [];
-let hand = '';
-let currentCard = '';
+let playerHand = '';
+let dealerHand = '';
+let currentScore = 0;
 let play = 'n';
-let anotherCard = 'n'
+let anotherCard = 'n';
+let playerScore = 0;
+let dealerScore = 0;
 
-function handScore(value) {
-  cardArray = [];
+function handScore(thePlayer,value) {
+  
+  //console.log(thePlayer);
+  //cardArray = [];
   return value.match(regex).reduce((accum, num) => {
     
   switch(num) {
@@ -74,13 +80,14 @@ function handScore(value) {
         break;
     default: num = parseInt(num);
   }
-  cardArray.push(num);
+
   return accum += num;
+  
   },0);
 };
 
   play = prompt("\nDo you want to play new game? ");
-  
+
   //console.log(`\nThere are ${deck.length} cards in the deck`);
 
 while (play === 'y') {
@@ -89,28 +96,37 @@ while (play === 'y') {
     deck.shuffle();
   }
   cardArray.length = 0;
+ 
 
- [1,2].forEach(i => hand += deck.deal() + ' ');
-    console.log(hand);
-    console.log(`Your score is ${handScore(hand)}`)
+ [1,2].forEach(i => playerHand += deck.deal() + ' ');
+ [1,2].forEach(i => dealerHand += deck.deal() + ' ');
+    console.log(`Dealer has ${dealerHand}`);
+    console.log(`Player has ${playerHand}`);
+    console.log(`Your score is ${handScore('player', playerHand)}`)
     anotherCard = prompt('Do you want antother card ? ')
  
   while(anotherCard === 'y') {
-    hand += deck.deal() + ' '
-    console.log(hand);
-    console.log(`Your score is ${handScore(hand)}`)
-     if(handScore(hand) > 21) {
-       console.log(cardArray);
+    
+    playerHand += deck.deal() + ' ';
+    console.log(playerHand);
+    console.log(`Your score is ${playerScore}`)
+     if(playerScore > 21) {
+      // console.log(cardArray);
     console.log("You Bust!!");
     anotherCard = 'n';
-    hand = '';
+    playerHand = '';
     } else {
-      anotherCard = prompt('Do you want antother card ? ')
+      anotherCard = prompt('\nDo you want antother card ? ')
     }
   } 
 
-  console.log(`\nYour final score is ${cardArray.reduce((a,b) => a + b)}`);
-  hand = '';
-  play = prompt("\nDo you want to play new game? "); 
-}
+  console.log(`\nYour final score is ${playerScore}`);
 
+  
+
+
+
+  playerHand = '';
+  play = prompt("\nDo you want to play new game? "); 
+  
+}
